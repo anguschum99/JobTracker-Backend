@@ -1,13 +1,14 @@
 package angus.JobTracker.service;
 
+import angus.JobTracker.exception.ResourceNotFoundException;
 import angus.JobTracker.exception.UserNotFoundException;
 import angus.JobTracker.model.Job;
 import angus.JobTracker.repo.JobRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class JobService {
@@ -31,7 +32,8 @@ public class JobService {
         return jobRepo.save(job);
     }
 
-    public void deleteJob(Long id){
+    @Transactional
+    public void deleteJob(Long id) {
         jobRepo.deleteJobById(id);
     }
 

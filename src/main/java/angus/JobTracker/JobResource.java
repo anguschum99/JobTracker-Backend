@@ -1,5 +1,6 @@
 package angus.JobTracker;
 
+import angus.JobTracker.exception.ResourceNotFoundException;
 import angus.JobTracker.model.Job;
 import angus.JobTracker.service.JobService;
 import org.springframework.http.HttpStatus;
@@ -42,9 +43,15 @@ public class JobResource {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteJob(@PathVariable("id") Long id){
-        jobService.deleteJob(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> deleteJob(@PathVariable("id") Long id) {
+        try {
+            jobService.deleteJob(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
